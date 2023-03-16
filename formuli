@@ -1,0 +1,7 @@
+package figuri;
+
+public interface Fomuli {
+    public double volume();
+
+    public double face();
+}
