@@ -1,0 +1,17 @@
+package figuri;
+
+public class Cube {
+    double a;
+
+    public double face() {
+        double s = a * a;
+        System.out.println("face = " + s);
+        return s;
+    }
+
+    public double volume() {
+        double v = Math.pow(a, 3);
+        System.out.println("volume = " + v);
+        return v;
+    }
+}
