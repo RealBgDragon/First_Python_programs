@@ -1,0 +1,18 @@
+package figuri;
+
+public class Parare {
+    double a, b, c;
+
+    public double face() {
+        double s = 2 * (a * b + a * c + b * c);
+        System.out.println("face = " + s);
+        return s;
+    }
+
+    public double volume() {
+        double v = a * b * c;
+        System.out.println("volume = " + v);
+        return v;
+    }
+
+}
