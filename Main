@@ -1,0 +1,88 @@
+package figuri;
+
+import java.util.*;
+import java.lang.Math;
+
+public class Main {
+
+    public static void menu() {
+        System.out.println("Изберете опция");
+        System.out.println("1. Куб");
+        System.out.println("2. Парале");
+        System.out.println("3. Изход");
+    }
+
+    public static void SMaxCube(Cube cube[]) {
+        double max = cube[0].face();
+        for (int i = 0; i < cube.length; i++){
+            if(max < cube[i].face()){
+                max = cube[i].face();
+            }
+        }
+        System.out.println("Max = " + max);
+    }
+
+    public static void SMaxParale(Parare parare[]) {
+
+    }
+
+    public static void VMinCube(Cube cube[]) {
+
+    }
+
+    public static void VMinParale(Parare parare[]) {
+
+    }
+
+    public static void main(String[] args) {
+
+        int n = 0;
+        boolean validInput = false;
+        Scanner kb = new Scanner(System.in);
+        while (!validInput) {
+            try {
+                System.out.println("Broj figuri");
+                n = kb.nextInt();
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Въведете число!");
+                kb.nextLine();
+            }
+        }
+        Cube cube[] = new Cube[n];
+        Parare parare[] = new Parare[n];
+        for (int i = 0; i < n; i++) {
+            cube[i] = new Cube();
+            parare[i] = new Parare();
+        }
+        int k = 0;
+        do {
+            menu();
+            k = kb.nextInt();
+            switch (k) {
+                case 1:
+                    for (int i = 0; i < n; i++) {
+                        System.out.println("Vuvedete a");
+                        cube[i].a = kb.nextDouble();
+                    }
+//                    SMaxCube(cube);
+                    VMinCube(cube);
+                    break;
+                case 2:
+                    for (int i = 0; i < n; i++) {
+                        System.out.println("Vuvedete a");
+                        parare[i].a = kb.nextDouble();
+                        System.out.println("Vuvedete b");
+                        parare[i].b = kb.nextDouble();
+                        System.out.println("Vuvedete c");
+                        parare[i].c = kb.nextDouble();
+                    }
+                    SMaxParale(parare);
+                    VMinParale(parare);
+                    break;
+                default:
+                    System.out.println("Priqten den!");
+            }
+        } while (k != 3);
+    }
+}
