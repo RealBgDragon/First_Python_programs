@@ -104,6 +104,18 @@ add_button = tk.Button(window, text="^", width=5, height=1, command=pow)
 add_button.config(font=("Arial", 20))
 add_button.place(x=125, y=265)
 
+# log method
+def log():
+    x = float(entry_widget1.get())
+    y = float(entry_widget2.get())
+    result = math.log(x) / math.log(y)
+    label1.configure(text=str(result))
+
+# log button
+add_button = tk.Button(window, text="log", width=5, height=1, command=log)
+add_button.config(font=("Arial", 20))
+add_button.place(x=225, y=265)
+
 # mile and km method
 def distance():
     temp = ""
@@ -160,7 +172,7 @@ add_button.place(x=125, y=330)
 
 #! feet to meters
 def feet_to_meters(feet):
-    feet_str, inches_str = feet.split("feet")
+    feet_str, inches_str = feet.split("f")
     
     # feet to m
     feet_m = float(feet_str) * 0.3048
@@ -175,6 +187,13 @@ def feet_to_meters(feet):
     return total_m
 
 #! meters to feet
+def meters_to_feet(meters):
+    total_inches = meters / 0.0254
+    feet = int(total_inches // 12)
+    inches = int(total_inches % 12)
+    return f"{feet}'{inches}\""
+    
+
 
 # foot and meter method
 def lenght():
@@ -187,8 +206,10 @@ def lenght():
         temp = "m"
     elif y and not x:  # if y has a value and x is empty
         y = float(y)
-        result = y * 3.28084
-        #?temp = "foot"
+        result = y/100
+        #result = y / 3.28084
+        temp = "ft"
+        result = meters_to_feet(result)
     elif x and y:  # if both x and y have values
         x = float(x)
         y = float(y)
