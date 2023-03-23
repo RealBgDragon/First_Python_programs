@@ -39,6 +39,39 @@ def add():
 add_button = tk.Button(window, text="+", width=20, height=4, command=add)
 add_button.place(x=25, y=200)
 
+# subtract method
+def sub():
+    x = float(entry_widget1.get())
+    y = float(entry_widget2.get())
+    result = x - y
+    label1.configure(text=str(result))
+    
+# subtract button
+add_button = tk.Button(window, text="-", width=20, height=4, command=sub)
+add_button.place(x=330, y=200)
+
+# multiply method
+def mult():
+    x = float(entry_widget1.get())
+    y = float(entry_widget2.get())
+    result = x * y
+    label1.configure(text=str(result))
+    
+# multiply buttom
+add_button = tk.Button(window, text="*", width=20, height=4, command=mult)
+add_button.place(x=25, y=400)
+
+# divide method
+def div():
+    x = float(entry_widget1.get())
+    y = float(entry_widget2.get())
+    result1 = x / y
+    result = round(result1, 2)
+    label1.configure(text=str(result))
+    
+# divide buttom
+add_button = tk.Button(window, text="/", width=20, height=4, command=div)
+add_button.place(x=330, y=400)
 
 #TODO make the other labels
 
