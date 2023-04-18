@@ -7,7 +7,7 @@ window = tk.Tk()
 
 
 
-#! chose the window sieze
+#! chosme the window sieze
 window.geometry("500x500")
 
 # Create a label widget and add it to the window
@@ -115,6 +115,21 @@ def log():
 add_button = tk.Button(window, text="log", width=5, height=1, command=log)
 add_button.config(font=("Arial", 20))
 add_button.place(x=225, y=265)
+
+# factorial
+
+def factorial():
+    x = float(entry_widget1.get())
+    result = 1
+    while x > 0:
+        result = result * x
+        x -= 1
+    label1.configure(text=str(result))
+        
+
+add_button = tk.Button(window, text="n!", width=9, height=1, command=factorial)
+add_button.config(font=("Arial", 20))
+add_button.place(x=325, y=265)
 
 # mile and km method
 def distance():
