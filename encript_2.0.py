@@ -12,7 +12,7 @@ window.geometry("1000x500")
 label = tk.Label(window, text="Encription")
 label.pack()
 
-entry_widget = tk.Entry(window, width=30, font=("Arial", 20))
+entry_widget = tk.Entry(window, width=50, font=("Arial", 20))
 entry_widget.place(x=500, y=50, anchor=tk.CENTER)
 
 label1 = tk.Label(window, text="", width=75, font=("Ariel", 20))
@@ -20,10 +20,10 @@ label1.place(x=500, y=450, anchor=tk.CENTER)
 
 #! secret key generation
 key = secrets.token_bytes(16)
-iv = ''
+iv = secrets.token_bytes(16)
 
 def encrypt():
-    iv = secrets.token_bytes(16)
+    
     #*create an AES cipher object 
     cipher = AES.new(key, AES.MODE_CBC, iv)
     user_input = entry_widget.get()
