@@ -1,6 +1,7 @@
 import tkinter as tk
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad, unpad
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import base64, pyperclip
 
 window = tk.Tk()
 
@@ -15,38 +16,37 @@ label1 = tk.Label(window, text="", width=75, font=("Ariel", 20))
 label1.place(x=500, y=450, anchor=tk.CENTER)
 
 #! secret key generation
-key = secrets.token_bytes(16)
-iv = secrets.token_bytes(16)
+key = RSA.generate(2048)
 
-def encrypt():
-    #*create an AES cipher object 
-    cipher = AES.new(key, AES.MODE_CBC, iv)
+def encrypt(): 
     user_input = entry_widget.get()
+    #*create an RSA cipher object
+    cipher = PKCS1_OAEP.new(key.public_key())
     # makes into bytes
     text_bytes = user_input.encode('UTF-8')
     #* encript the message
-    plain_text = text_bytes
-    padded_plain_text = pad(plain_text, AES.block_size)
-    cipher_text = cipher.encrypt(padded_plain_text)
+    cipher_text_bytes = cipher.encrypt(text_bytes)
+    #* as base64 for safe trans
+    cipher_text_base64 = base64.b64encode(cipher_text_bytes).decode('utf-8')
     
-    label1.configure(text=str(cipher_text))
-    # converts to hex
-    cipher_text_str = cipher_text.hex()
+    label1.configure(text=cipher_text_base64)
     # copy to clipboard
-    pyperclip.copy(cipher_text_str)
+    pyperclip.copy(cipher_text_base64)
 
 encrypt_button = tk.Button(window, text="encrypt", width=10, height=2, command=encrypt)
 encrypt_button.configure(font=("Ariel", 20))
 encrypt_button.place(x=250, y=150, anchor=tk.CENTER)
 
 def decrypt():
-    cipher = AES.new(key, AES.MODE_CBC, iv)
     user_input = entry_widget.get()
-    #* hex to byte
-    cipher_text = bytes.fromhex(user_input)
+    cipher_text_base64 = user_input
+    #* Decode from base64
+    cipher_text_bytes = base64.b64decode(cipher_text_base64.encode('utf-8'))
+    #* RSA object
+    cipher = PKCS1_OAEP.new(key)
     #* decripts the message
-    decrypted_padded_plaintext = cipher.decrypt(cipher_text)
-    plaint_text = unpad(decrypted_padded_plaintext, AES.block_size)
+    message_bytes = cipher.decrypt(cipher_text_bytes)
+    plaint_text = message_bytes.decode('utf-8')
     
     label1.configure(text=str(plaint_text))
     
