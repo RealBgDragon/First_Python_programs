@@ -19,10 +19,6 @@ key = secrets.token_bytes(16)
 iv = secrets.token_bytes(16)
 
 def encrypt():
-<<<<<<< HEAD
-=======
-    
->>>>>>> ffafc061e6a129b5ba81aed870164a2a286ab263
     #*create an AES cipher object 
     cipher = AES.new(key, AES.MODE_CBC, iv)
     user_input = entry_widget.get()
