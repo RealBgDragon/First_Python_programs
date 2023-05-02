@@ -18,12 +18,8 @@ label.pack()
 entry_widget1 = tk.Entry(window, width=30, font=("Arial", 20))
 entry_widget1.place(x=25, y=50)
 
-user_input1 = entry_widget1.get()
-
 entry_widget2 = tk.Entry(window, width=30, font=("Arial", 20))
 entry_widget2.place(x=25, y=125)
-
-user_input2 = entry_widget2.get()
 
 label1 = tk.Label(window, text="", width=30, font=("Arial", 20))
 label1.place(x=15, y=450)
@@ -188,7 +184,7 @@ add_button.place(x=125, y=330)
 #! feet to meters
 def feet_to_meters(feet):
     feet_str, inches_str = feet.split("f")
-    feet_str, inches_str = feet.split(" ")
+    #   feet_str, inches_str = feet.split(" ")
     
     # feet to m
     feet_m = float(feet_str) * 0.3048
