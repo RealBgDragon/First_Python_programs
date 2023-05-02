@@ -188,7 +188,7 @@ add_button.place(x=125, y=330)
 #! feet to meters
 def feet_to_meters(feet):
     feet_str, inches_str = feet.split("f")
-    feet_str, inches_str = feet.split(" ")
+    #feet_str, inches_str = feet.split(" ")
     
     # feet to m
     feet_m = float(feet_str) * 0.3048

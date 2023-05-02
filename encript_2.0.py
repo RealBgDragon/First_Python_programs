@@ -1,6 +1,7 @@
 import tkinter as tk
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
+import secrets, pyperclip
 
 window = tk.Tk()
 
