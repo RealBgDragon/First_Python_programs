@@ -49,8 +49,16 @@ def edit_task():
     task_entry.delete(0, END)
     
 
-#def delete_task():
- #   task = task_entry.delete(0, END)
+def delete_task():
+    selection = task_list.curselection()
+    
+    if len(selection) == 0:
+        messagebox.showerror("Error", "No task selected")
+        return
+    task_index = selection[0]
+    task_text = task_list.get(task_index)
+    
+    task_list.delete(task_index)
     
 # task entry button
 add_button = Button(window, text="Add task", command=add_task)
@@ -59,6 +67,8 @@ add_button.pack(side=LEFT, anchor=NW)
 edit_button = Button(window, text="Edit Task", command=edit_task)
 edit_button.pack(side=LEFT, anchor=NW)
 
+delete_button = Button(window, text="Delete", command=delete_task)
+delete_button.pack(side=LEFT, anchor=NW)
 
 
 file_menu = Menu(menu, font=("Arial", 10))
@@ -83,8 +93,8 @@ def save_task_list():
     
 #! add a functionallity to the options
 file_menu.add_command(label="New Task List", command=new_task_list)
-file_menu.add_command(label="Open Task List", command=new_task_list)
-file_menu.add_command(label="Save Task List", command=new_task_list)
+file_menu.add_command(label="Open Task List", command=open_task_list)
+file_menu.add_command(label="Save Task List", command=save_task_list)
 
 file_menu.add_separator()
 file_menu.add_command(label="Exit", command=exit_program)
