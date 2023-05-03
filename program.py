@@ -1,19 +1,18 @@
 from tkinter import *
+from tkinter import messagebox
 
 window = Tk()
 
 label = Label(window, width=20, font=("Ariel", 16), text="To-Do list")
 label.pack()
 
-window.geometry("500x750")
+window.geometry("750x750")
 
 task_list = Listbox(window)
 task_list.pack(side=RIGHT, fill=BOTH, expand=TRUE)
 
-#task entry
 task_entry = Entry(window)
-task_entry.pack(side=LEFT)
-
+task_entry.pack(side=LEFT, anchor=NW)
 
 scrollbar = Scrollbar(window)
 scrollbar.pack(side=RIGHT, fill=Y)
@@ -31,12 +30,34 @@ def add_task():
     task_list.insert(END, task)
     #clear the widget
     task_entry.delete(0, END)
+    
+def edit_task():
+    selection = task_list.curselection()
+    if len(selection) == 0:
+        messagebox.showerror("Error", "No task selected")
+        return
+    task_index = selection[0]
+    task_text = task_list.get(task_index)
+    
+    new_task_text = task_entry.get()
+    if len(new_task_text) == 0:
+        messagebox.showerror("Error", "Please enter a new task text")
+        return
+    task_list.delete(task_index)
+    task_list.insert(task_index, new_task_text)
+    
+    task_entry.delete(0, END)
+    
 
+#def delete_task():
+ #   task = task_entry.delete(0, END)
+    
 # task entry button
 add_button = Button(window, text="Add task", command=add_task)
-add_button.pack(side=LEFT)
+add_button.pack(side=LEFT, anchor=NW)
 
-
+edit_button = Button(window, text="Edit Task", command=edit_task)
+edit_button.pack(side=LEFT, anchor=NW)
 
 
 
