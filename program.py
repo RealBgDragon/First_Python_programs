@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter.filedialog import asksaveasfilename
+import os
 
 window = Tk()
 
@@ -85,10 +87,20 @@ def new_task_list():
     print("New Task List")
 
 def open_task_list():
-    print("Open Task List")
+    filename = "C:/Users/marti/Desktop/To-Do list files"
+    if filename:
+        with open(filename, "r") as f:
+            contents = f.read()
+            task_list.delete(0, END)
+            for i in contents.split("\n"):
+                task_list.insert(END, i)
 
 def save_task_list():
-    print("Save Task List")
+    filename = asksaveasfilename(initialdir=os.path.expanduser("~/Desktop/To-Do list files"), defaultextension=".txt")
+    if filename:
+        with open(filename, "w") as f:
+            for i in range(task_list.size()):
+                f.write(task_list.get(i) + "\n")
     
     
 #! add a functionallity to the options
