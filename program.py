@@ -14,9 +14,6 @@ window.geometry("750x750")
 task_list = Listbox(window)
 task_list.pack(side=RIGHT, fill=BOTH, expand=TRUE)
 
-task_entry = Entry(window)
-task_entry.pack(side=LEFT, anchor=NW)
-
 scrollbar = Scrollbar(window)
 scrollbar.pack(side=RIGHT, fill=Y)
 task_list.config(yscrollcommand=scrollbar.set)
@@ -27,35 +24,67 @@ window.config(menu=menu)
 
 #add_button methood
 def add_task():
-    task = task_entry.get()
-    #insert into the end
-    task_list.insert(END, task)
-    #clear the widget
-    task_entry.delete(0, END)
+    # submit button
+    def submit():
+        task = entry.get()
+        if len(task) == 0:
+            messagebox.showerror("Please enter task name!")
+            return
+        popup.destroy()
+        task_list.insert(END, task)
+    # creates popup    
+    popup = Toplevel()
+    popup.title("Add task!")
+    popup.geometry("250x100")
+    # label for the popup
+    labelp = Label(popup, text="Enter you data:")
+    labelp.pack()
+    # entry for the popup
+    entry = Entry(popup)
+    entry.pack()
+    # submit button
+    submit_button = Button(popup, text="Submit!", command=submit)
+    submit_button.pack()
+    
     
 # edit task
 def edit_task():
+    def submit():
+        data = entry.get()
+        if len(data) == 0:
+            messagebox.showerror("Please enter task name!")
+            return
+        popup.destroy()
+        task_list.delete(task_index)
+        task_list.insert(task_index, data)
+    # mark selected task
     selection = task_list.curselection()
+    # chek for the selection
     if len(selection) == 0:
-        messagebox.showerror("Error", "No task selected")
+        messagebox.showerror("Please select task!")
         return
+    # index of the selected task
     task_index = selection[0]
-    
-    new_task_text = task_entry.get()
-    if len(new_task_text) == 0:
-        messagebox.showerror("Error", "Please enter a new task text")
-        return
-    task_list.delete(task_index)
-    task_list.insert(task_index, new_task_text)
-    
-    task_entry.delete(0, END)
-    
+    # creates popup
+    popup = Toplevel()
+    popup.title("Edit task!")
+    popup.geometry("250x100")
+    # label for the popup
+    labelp = Label(popup, text="Enter you data:")
+    labelp.pack()
+    # entry for the popup
+    entry = Entry(popup)
+    entry.pack()
+    # submit button 
+    submit_button = Button(popup, text="Submit!", command=submit)
+    submit_button.pack()
+
 # delete task
 def delete_task():
     selection = task_list.curselection()
     
     if len(selection) == 0:
-        messagebox.showerror("Error", "No task selected")
+        messagebox.showerror("Error!", "No task selected.")
         return
     task_index = selection[0]
     
@@ -90,7 +119,8 @@ def open_task_list():
             contents = f.read()
             task_list.delete(0, END)
             for i in contents.split("\n"):
-                task_list.insert(END, i)
+                if i.strip():
+                    task_list.insert(END, i)
 
 # save task list
 def save_task_list():
@@ -100,7 +130,6 @@ def save_task_list():
             for i in range(task_list.size()):
                 f.write(task_list.get(i) + "\n")
     
-#! add a functionallity to the options
 file_menu.add_command(label="New Task List", command=new_task_list)
 file_menu.add_command(label="Open Task List", command=open_task_list)
 file_menu.add_command(label="Save Task List", command=save_task_list)
