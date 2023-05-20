@@ -1,8 +1,8 @@
-import tkinter as tk
+from tkinter import *
 import math
 
 #! Create a new Tkinter window
-window = tk.Tk()
+window = Tk()
 
 
 
@@ -11,106 +11,104 @@ window = tk.Tk()
 window.geometry("500x500")
 
 # Create a label widget and add it to the window
-label = tk.Label(window, text="Calculator")
+label = Label(window, text="Calculator")
 label.pack()
 
 # input
-entry_widget1 = tk.Entry(window, width=30, font=("Arial", 20))
+entry_widget1 = Entry(window, width=30, font=("Arial", 20))
 entry_widget1.place(x=25, y=50)
 
-entry_widget2 = tk.Entry(window, width=30, font=("Arial", 20))
+entry_widget2 = Entry(window, width=30, font=("Arial", 20))
 entry_widget2.place(x=25, y=125)
 
-label1 = tk.Label(window, text="", width=30, font=("Arial", 20))
+label1 = Label(window, text="", width=30, font=("Arial", 20))
 label1.place(x=15, y=450)
 
 x = 0
 y = 0
-# add method
-def add():
+# automataically do some of the code
+def get_value():
     x = float(entry_widget1.get())
     y = float(entry_widget2.get())
+    return x, y
+# add method
+def add():
+    x, y = get_value()
     result = x + y
     label1.configure(text=str(result))
     
 # add buttom
-add_button = tk.Button(window, text="+", width=5, height=1, command=add)
+add_button = Button(window, text="+", width=5, height=1, command=add)
 add_button.config(font=("Arial", 20))
 add_button.place(x=25, y=200)
 
 # subtract method
 def sub():
-    x = float(entry_widget1.get())
-    y = float(entry_widget2.get())
+    x, y = get_value()
     result = x - y
     label1.configure(text=str(result))
     
 # subtract button
-add_button = tk.Button(window, text="-", width=5, height=1, command=sub)
-add_button.config(font=("Arial", 20))
-add_button.place(x=125, y=200)
+sub_button = Button(window, text="-", width=5, height=1, command=sub)
+sub_button.config(font=("Arial", 20))
+sub_button.place(x=125, y=200)
 
 # multiply method
 def mult():
-    x = float(entry_widget1.get())
-    y = float(entry_widget2.get())
+    x, y = get_value()
     result = x * y
     label1.configure(text=str(result))
     
 # multiply buttom
-add_button = tk.Button(window, text="*", width=5, height=1, command=mult)
-add_button.config(font=("Arial", 20))
-add_button.place(x=225, y=200)
+mult_button = Button(window, text="*", width=5, height=1, command=mult)
+mult_button.config(font=("Arial", 20))
+mult_button.place(x=225, y=200)
 
 # divide method
 def div():
-    x = float(entry_widget1.get())
-    y = float(entry_widget2.get())
+    x, y = get_value()
     result = x / y
     result = round(result, 2)
     label1.configure(text=str(result))
     
 # divide buttom
-add_button = tk.Button(window, text="/", width=9, height=1, command=div)
-add_button.config(font=("Arial", 20))
-add_button.place(x=325, y=200)
+div_button = Button(window, text="/", width=9, height=1, command=div)
+div_button.config(font=("Arial", 20))
+div_button.place(x=325, y=200)
 
 #sqrt method
 def sqrt():
-    x = float(entry_widget1.get())
-    y = float(entry_widget2.get())
+    x, y = get_value()
     result = x ** (1/y)
     result = round(result, 2)
     label1.configure(text=str(result))
 
 # sqrt button
-add_button = tk.Button(window, text="√", width=5, height=1, command=sqrt)
-add_button.config(font=("Arial", 20))
-add_button.place(x=25, y=265)
+sqrt_button = Button(window, text="√", width=5, height=1, command=sqrt)
+sqrt_button.config(font=("Arial", 20))
+sqrt_button.place(x=25, y=265)
 
 # pow method
 def pow():
-    x = float(entry_widget1.get())
-    y = float(entry_widget2.get())
+    x, y = get_value()
     result = x ** y
     label1.configure(text=str(result))
 
 # pow button
-add_button = tk.Button(window, text="^", width=5, height=1, command=pow)
-add_button.config(font=("Arial", 20))
-add_button.place(x=125, y=265)
+pow_button = Button(window, text="^", width=5, height=1, command=pow)
+pow_button.config(font=("Arial", 20))
+pow_button.place(x=125, y=265)
 
 # log method
 def log():
-    x = float(entry_widget1.get())
-    y = float(entry_widget2.get())
+    x, y = get_value()
     result = math.log(x) / math.log(y)
     label1.configure(text=str(result))
 
 # log button
-add_button = tk.Button(window, text="log", width=5, height=1, command=log)
-add_button.config(font=("Arial", 20))
-add_button.place(x=225, y=265)
+log_button = Button(window, text="log", width=5, height=1, command=log)
+log_button.config(font=("Arial", 20))
+log_button.place(x=225, y=265)
 
 # factorial
 
@@ -123,9 +121,9 @@ def factorial():
     label1.configure(text=str(result))
         
 
-add_button = tk.Button(window, text="n!", width=9, height=1, command=factorial)
-add_button.config(font=("Arial", 20))
-add_button.place(x=325, y=265)
+fac_button = Button(window, text="n!", width=9, height=1, command=factorial)
+fac_button.config(font=("Arial", 20))
+fac_button.place(x=325, y=265)
 
 # mile and km method
 def distance():
@@ -150,9 +148,9 @@ def distance():
     label1.configure(text=str(result) + temp)
 
 # mile and km button
-add_button = tk.Button(window, text="mil/km", width=5, height=1, command=distance)
-add_button.config(font=("Arial", 20))
-add_button.place(x=25, y=330)
+km_button = Button(window, text="mil/km", width=5, height=1, command=distance)
+km_button.config(font=("Arial", 20))
+km_button.place(x=25, y=330)
 
 # pound and kg method
 def weight():
@@ -177,9 +175,9 @@ def weight():
     label1.configure(text=str(result) + temp)
 
 # pound and kg button
-add_button = tk.Button(window, text="pnd/kg", width=5, height=1, command=weight)
-add_button.config(font=("Arial", 20))
-add_button.place(x=125, y=330)
+kg_button = Button(window, text="pnd/kg", width=5, height=1, command=weight)
+kg_button.config(font=("Arial", 20))
+kg_button.place(x=125, y=330)
 
 #! feet to meters
 def feet_to_meters(feet):
@@ -231,9 +229,9 @@ def lenght():
     label1.configure(text=str(result) + temp)
 
 # foot and meter button
-add_button = tk.Button(window, text="foot/m", width=5, height=1, command=lenght)
-add_button.config(font=("Arial", 20))
-add_button.place(x=225, y=330)
+foot_button = Button(window, text="foot/m", width=5, height=1, command=lenght)
+foot_button.config(font=("Arial", 20))
+foot_button.place(x=225, y=330)
 
 def speed():
     temp = ""
@@ -257,12 +255,9 @@ def speed():
     label1.configure(text=str(result) + temp)
 
 # mph and kph button
-add_button = tk.Button(window, text="kph/mph", width=9, height=1, command=speed)
-add_button.config(font=("Arial", 20))
-add_button.place(x=325, y=330)
-
-
-#TODO think of other actions
+kph_button = Button(window, text="kph/mph", width=9, height=1, command=speed)
+kph_button.config(font=("Arial", 20))
+kph_button.place(x=325, y=330)
 
 # Run the Tkinter event loop
 window.mainloop()
