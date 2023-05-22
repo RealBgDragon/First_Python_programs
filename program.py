@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter.filedialog import asksaveasfilename
-from tkinter.filedialog import askopenfilename
+from tkinter import filedialog
 from tkcalendar import DateEntry
+import json
 import os
 
 window = Tk()
@@ -23,32 +23,19 @@ scrollbar.config(command=task_list.yview)
 
 # array of additional info
 additional_info = []
+# array for date
+dates = []
 
 menu = Menu(window)
 window.config(menu=menu)
 
-#add_button methood
-def add_task():
-    # submit button
-    def submit():
-        task = entry.get()
-        more_info_temp = entry_more_info.get()
-        additional_info.append(more_info_temp)
-        if len(task) == 0 or len(more_info_temp) == 0:
-            messagebox.showerror("Please enter the requered info!")
-            return
-        popup.destroy()
-        task_list.insert(END, task)
-    # creates popup    
-    popup = Toplevel()
-    popup.title("Add task!")
-    popup.geometry("250x250")
+def popup_setup(popup, submit):
     # label for the popup
-    labelp = Label(popup, text="Enter your info:")
-    labelp.place(anchor=CENTER, x=125, y=10)
+    labelp = Label(popup, text="Enter you data:")
+    labelp.pack()
     # entry for the popup
     entry = Entry(popup)
-    entry.place(anchor=CENTER, x=125, y=50)
+    entry.pack()
     # aditional info label
     additional_info_label = Label(popup, text="Enter details:")
     additional_info_label.place(anchor=CENTER, x=125, y=75)
@@ -64,18 +51,45 @@ def add_task():
     # submit button
     submit_button = Button(popup, text="Submit!", command=submit)
     submit_button.place(anchor=CENTER, x=125, y=200)
+    return entry, entry_more_info, date_entry
+
+#add_button methood
+def add_task():
+    # submit button
+    def submit():
+        task = entry.get()
+        more_info_temp = entry_more_info.get()
+        date_temp = date_entry.get_date()  # Get the selected date.
+        date_str = date_temp.strftime("%Y-%m-%d")  # Convert date to string.
+        if len(task) == 0 or len(more_info_temp) == 0:
+            messagebox.showerror("Please enter the requered info!")
+            return
+        popup.destroy()
+        task_list.insert(END, task)
+        additional_info.append(more_info_temp)
+        dates.append(date_str)
+        
+    # creates popup    
+    popup = Toplevel()
+    popup.title("Add task!")
+    popup.geometry("250x250")
+    entry, entry_more_info, date_entry = popup_setup(popup,submit)
     
-    
-# edit task
+
 def edit_task():
     def submit():
-        data = entry.get()
-        if len(data) == 0:
-            messagebox.showerror("Please enter task name!")
+        task = entry.get()
+        more_info_temp = entry_more_info.get()
+        date_temp = date_entry.get_date()
+        date_str = date_temp.strftime("%Y-%m-%d")
+        if len(task) == 0 or len(more_info_temp) == 0:
+            messagebox.showerror("Please enter the requered info!")
             return
         popup.destroy()
         task_list.delete(task_index)
-        task_list.insert(task_index, data)
+        task_list.insert(task_index, task)
+        additional_info[task_index] = more_info_temp
+        dates[task_index] = date_str
     # mark selected task
     selection = task_list.curselection()
     # chek for the selection
@@ -84,19 +98,12 @@ def edit_task():
         return
     # index of the selected task
     task_index = selection[0]
+    
     # creates popup
     popup = Toplevel()
     popup.title("Edit task!")
-    popup.geometry("250x100")
-    # label for the popup
-    labelp = Label(popup, text="Enter you data:")
-    labelp.pack()
-    # entry for the popup
-    entry = Entry(popup)
-    entry.pack()
-    # submit button 
-    submit_button = Button(popup, text="Submit!", command=submit)
-    submit_button.pack()
+    popup.geometry("250x250")
+    entry, entry_more_info, date_entry = popup_setup(popup,submit)
 
 # delete task
 def delete_task():
@@ -110,7 +117,7 @@ def delete_task():
     task_list.delete(task_index)
 
 #TODO finish the more info function
-def more_info():
+def more_info(event):
     selection = task_list.curselection()
     if len(selection) == 0:
         messagebox.showerror("Error!", "No task selected.")
@@ -121,15 +128,25 @@ def more_info():
     popup.title(f"Additional info for {selected_task}")
     popup.geometry("300x300")
     # name of the task
-    task_name_label = Label(popup, text=f"Task: {selected_task}")
-    task_name_label.place(anchor=CENTER, x=150, y=10)
+    task_name_text = Label(popup, text=f"Task: {selected_task}")
+    task_name_text.place(anchor=CENTER, x=150, y=10)
     # selected task info
     selected_task_info = additional_info[task_index]
     # additional info for the task
-    task_info_label_label = Label(popup, text=f"Additional task info:")
-    task_info_label_label.place(anchor=CENTER, x=150, y=60)
-    task_info_label = Label(popup, text=selected_task_info)
-    task_info_label.place(anchor=CENTER, x=150, y=80)
+    task_info_label = Label(popup, text="Additional task info:")
+    task_info_label.place(anchor=CENTER, x=150, y=60)
+    task_info_text = Label(popup, text=selected_task_info)
+    task_info_text.place(anchor=CENTER, x=150, y=80)
+    # date task info
+    selected_date_info = dates[task_index]
+    # additional info for the date
+    date_info_label = Label(popup, text="Date:")
+    date_info_label.place(anchor=CENTER, x=150, y=100)
+    date_info_text = Label(popup, text=selected_date_info)
+    date_info_text.place(anchor=CENTER, x=150, y=120)
+    
+# can double click to open additional infos   
+task_list.bind("<Double-Button-1>", more_info)
     
 # add button
 add_button = Button(window, text="Add task", command=add_task)
@@ -154,25 +171,32 @@ def exit_program():
 def new_task_list():
     for i in range(task_list.size()):
         task_list.delete(i)
-
-# open task
+# save task
 def open_task_list():
-    filename = askopenfilename(initialdir=os.path.expanduser("~/Desktop/To-Do list files"), defaultextension=".txt")
-    if filename:
-        with open(filename, "r") as f:
-            contents = f.read()
-            task_list.delete(0, END)
-            for i in contents.split("\n"):
-                if i.strip():
-                    task_list.insert(END, i)
+    filename = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
+    if not filename:
+        return  # User canceled open dialog
 
-# save task list
+    with open(filename, 'r') as f:
+        data = json.load(f)
+    for task in data['tasks']:
+        task_list.insert(END, task)
+    additional_info[:] = data['additional_info']
+    dates[:] = data['dates']
+# load task
 def save_task_list():
-    filename = asksaveasfilename(initialdir=os.path.expanduser("~/Desktop/To-Do list files"), defaultextension=".txt")
-    if filename:
-        with open(filename, "w") as f:
-            for i in range(task_list.size()):
-                f.write(task_list.get(i) + "\n")
+    filename = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
+    if not filename:
+        return  # User canceled save dialog
+
+    data = {
+        'tasks': list(task_list.get(0, END)), 
+        'additional_info': additional_info, 
+        'dates': dates
+    }
+    with open(filename, 'w') as f:
+        json.dump(data, f)
+
     
 file_menu.add_command(label="New Task List", command=new_task_list)
 file_menu.add_command(label="Open Task List", command=open_task_list)
