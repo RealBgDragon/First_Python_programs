@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkcalendar import DateEntry
 import json
-import os
+import datetime
 
 window = Tk()
 
@@ -29,6 +29,7 @@ dates = []
 menu = Menu(window)
 window.config(menu=menu)
 
+# popup setup
 def popup_setup(popup, submit):
     # label for the popup
     labelp = Label(popup, text="Enter you data:")
@@ -53,7 +54,7 @@ def popup_setup(popup, submit):
     submit_button.place(anchor=CENTER, x=125, y=200)
     return entry, entry_more_info, date_entry
 
-#add_button methood
+# add_button methood
 def add_task():
     # submit button
     def submit():
@@ -208,5 +209,10 @@ menu.add_cascade(label="File", menu=file_menu)
 
 #TODO add past due and shit
 
+def past_due():
+    current_date = datetime.now()
+    for i in file_menu:
+        if dates[i] > current_date:
+            print("task is past due")
 
 window.mainloop()
