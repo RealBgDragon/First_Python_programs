@@ -124,11 +124,11 @@ def delete_task():
 def delete_task_delete(event):
     delete_task()
 # delete with delete
-task_list.bind("delete", delete_task_delete)
+task_list.bind("<Delete>", delete_task_delete)
 
     
 
-#TODO finish the more info function
+# more info function
 def more_info(event):
     selection = task_list.curselection()
     if len(selection) == 0:
@@ -163,6 +163,16 @@ def more_info(event):
         past_due_label = Label(popup, font=("Ariel", 16), text="!task is past due!", fg="red")
         past_due_label.place(anchor=CENTER, x=150, y=150)
     
+"""
+def mark_task_complete():
+    selection = task_list.curselection()
+    if len(selection) == 0:
+        messagebox.showerror("Error!", "No task selected!")
+        return
+    task_index = selection[0]
+    selected_task = task_list.get(task_index)
+    print("complete")
+    """
 # can double click to open additional infos   
 task_list.bind("<Double-Button-1>", more_info)
     
@@ -176,8 +186,11 @@ edit_button.pack(side=LEFT, anchor=NW)
 delete_button = Button(window, text="Delete", command=delete_task)
 delete_button.pack(side=LEFT, anchor=NW)
 # more info button
-more_info_button = Button(window, text="More info", command=more_info)
-more_info_button.pack(side=LEFT, anchor=SW)
+#more_info_button = Button(window, text="More info", command=more_info)
+#more_info_button.pack(side=LEFT, anchor=SW)
+# mark task complete button
+#task_complete_button = Button(window, text="Mark task complete", command=mark_task_complete)
+#task_complete_button.pack(side=LEFT, anchir=SW)
 
 file_menu = Menu(menu, font=("Arial", 10))
 
@@ -224,12 +237,5 @@ file_menu.add_separator()
 file_menu.add_command(label="Exit", command=exit_program)
 menu.add_cascade(label="File", menu=file_menu)
 
-#TODO add past due and shit
-
-def past_due():
-    current_date = datetime.now()
-    for i in file_menu:
-        if dates[i] > current_date:
-            print("task is past due")
-
+#! has to exist
 window.mainloop()
