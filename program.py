@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkcalendar import DateEntry
 import json
-import datetime
+from datetime import date
 
 window = Tk()
 
@@ -88,6 +88,8 @@ def edit_task():
             return
         popup.destroy()
         task_list.delete(task_index)
+        additional_info.pop(task_index)
+        dates.pop(task_index)
         task_list.insert(task_index, task)
         additional_info[task_index] = more_info_temp
         dates[task_index] = date_str
@@ -116,6 +118,15 @@ def delete_task():
     task_index = selection[0]
     
     task_list.delete(task_index)
+    additional_info.pop(task_index)
+    dates.pop(task_index)
+
+def delete_task_delete(event):
+    delete_task()
+# delete with delete
+task_list.bind("delete", delete_task_delete)
+
+    
 
 #TODO finish the more info function
 def more_info(event):
@@ -145,6 +156,12 @@ def more_info(event):
     date_info_label.place(anchor=CENTER, x=150, y=100)
     date_info_text = Label(popup, text=selected_date_info)
     date_info_text.place(anchor=CENTER, x=150, y=120)
+    # past due
+    today = date.today()
+    current_date = today.strftime("%Y-%m-%d")
+    if dates[task_index] < current_date:
+        past_due_label = Label(popup, font=("Ariel", 16), text="!task is past due!", fg="red")
+        past_due_label.place(anchor=CENTER, x=150, y=150)
     
 # can double click to open additional infos   
 task_list.bind("<Double-Button-1>", more_info)
@@ -170,8 +187,9 @@ def exit_program():
     
 # new task
 def new_task_list():
-    for i in range(task_list.size()):
-        task_list.delete(i)
+    task_list.delete(0, END)
+    additional_info.clear()
+    dates.clear()
 # save task
 def open_task_list():
     filename = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
@@ -197,8 +215,7 @@ def save_task_list():
     }
     with open(filename, 'w') as f:
         json.dump(data, f)
-
-    
+# files list
 file_menu.add_command(label="New Task List", command=new_task_list)
 file_menu.add_command(label="Open Task List", command=open_task_list)
 file_menu.add_command(label="Save Task List", command=save_task_list)
