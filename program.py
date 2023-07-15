@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 from tkcalendar import DateEntry
-from tkinter import font
 import json
 from datetime import date
 
@@ -13,10 +12,9 @@ label.pack()
 
 window.geometry("750x750")
 
-# Listbox for the tasks
 task_list = Listbox(window)
 task_list.pack(side=RIGHT, fill=BOTH, expand=TRUE)
-# scrollvar
+
 scrollbar = Scrollbar(window)
 scrollbar.pack(side=RIGHT, fill=Y)
 task_list.config(yscrollcommand=scrollbar.set)
@@ -62,10 +60,8 @@ def add_task():
     def submit():
         task = entry.get()
         more_info_temp = entry_more_info.get()
-        # Get the selected date.
-        date_temp = date_entry.get_date()  
-        # Convert date to string.
-        date_str = date_temp.strftime("%Y-%m-%d")
+        date_temp = date_entry.get_date()  # Get the selected date.
+        date_str = date_temp.strftime("%Y-%m-%d")  # Convert date to string.
         if len(task) == 0 or len(more_info_temp) == 0:
             messagebox.showerror("Please enter the requered info!")
             return
@@ -80,7 +76,7 @@ def add_task():
     popup.geometry("250x250")
     entry, entry_more_info, date_entry = popup_setup(popup,submit)
     
-# edit task methood
+
 def edit_task():
     def submit():
         task = entry.get()
@@ -115,18 +111,22 @@ def edit_task():
 # delete task
 def delete_task():
     selection = task_list.curselection()
+    
     if len(selection) == 0:
-        messagebox.showerror("Error!", "No task selected.")
+        messagebox.showerror("Error!", """No task selected.""")
         return
     task_index = selection[0]
+    
     task_list.delete(task_index)
     additional_info.pop(task_index)
     dates.pop(task_index)
-# mehtood to delte with delete
+
 def delete_task_delete(event):
     delete_task()
 # delete with delete
 task_list.bind("<Delete>", delete_task_delete)
+
+    
 
 # more info function
 def more_info(event):
@@ -163,6 +163,16 @@ def more_info(event):
         past_due_label = Label(popup, font=("Ariel", 16), text="!task is past due!", fg="red")
         past_due_label.place(anchor=CENTER, x=150, y=150)
     
+"""
+def mark_task_complete():
+    selection = task_list.curselection()
+    if len(selection) == 0:
+        messagebox.showerror("Error!", "No task selected!")
+        return
+    task_index = selection[0]
+    selected_task = task_list.get(task_index)
+    print("complete")
+    """
 # can double click to open additional infos   
 task_list.bind("<Double-Button-1>", more_info)
     
@@ -175,6 +185,9 @@ edit_button.pack(side=LEFT, anchor=NW)
 # delete button
 delete_button = Button(window, text="Delete", command=delete_task)
 delete_button.pack(side=LEFT, anchor=NW)
+# more info button
+#more_info_button = Button(window, text="More info", command=more_info)
+#more_info_button.pack(side=LEFT, anchor=SW)
 # mark task complete button
 #task_complete_button = Button(window, text="Mark task complete", command=mark_task_complete)
 #task_complete_button.pack(side=LEFT, anchir=SW)
@@ -195,6 +208,7 @@ def open_task_list():
     filename = filedialog.askopenfilename(filetypes=[("JSON files", "*.json")])
     if not filename:
         return  # User canceled open dialog
+
     with open(filename, 'r') as f:
         data = json.load(f)
     for task in data['tasks']:
@@ -206,6 +220,7 @@ def save_task_list():
     filename = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
     if not filename:
         return  # User canceled save dialog
+
     data = {
         'tasks': list(task_list.get(0, END)), 
         'additional_info': additional_info, 
