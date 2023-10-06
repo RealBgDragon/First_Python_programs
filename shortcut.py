@@ -1,5 +1,6 @@
 from pynput.keyboard import Key, Controller, Listener
 import time
+import threading
 
 keyboard = Controller()
 
@@ -9,17 +10,21 @@ spamming = False
 def on_press(key):
     global spamming
 
-    # Start or stop spamming when 'p' key is pressed
-    if key.char == 'p':
-        spamming = not spamming
+    try:
+        # Toggle spamming when 'p' key is pressed
+        if key.char == 'p':
+            if spamming:
+                spamming = False
+            else:
+                spamming = True
+                # Start a new thread for the spamming action
+                threading.Thread(target=spam_keys).start()
+    except AttributeError:
+        # Ignore the exception if it's not a character key
+        pass
 
-# This thread listens to key presses
-listener = Listener(on_press=on_press)
-listener.start()
-
-while True:
-    # If spamming is enabled, spam the down arrow and enter
-    if spamming:
+def spam_keys():
+    while spamming:
         keyboard.press(Key.down)
         keyboard.release(Key.down)
         time.sleep(0.1)  # You can adjust the delay as needed
@@ -28,4 +33,6 @@ while True:
         keyboard.release(Key.enter)
         time.sleep(0.1)  # You can adjust the delay as needed
 
-listener.join()
+# This thread listens to key presses
+with Listener(on_press=on_press) as listener:
+    listener.join()
